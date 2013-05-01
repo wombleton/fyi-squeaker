@@ -73,7 +73,7 @@ function poll() {
                     delay = process.env.DELAY || 5;
                 }
 
-                console.log('polling again in ' + delay + ' minutes ...');
+                console.log('polling again in ' + delay + ' minutes for events after ' + startup + ' ...');
                 setTimeout(poll, delay * 60 * 1000);
             });
         }
