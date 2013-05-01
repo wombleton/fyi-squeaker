@@ -30,6 +30,7 @@ try {
 feedUrl = url.parse(process.env.FEED_URL);
 
 function poll() {
+    var latest = startup;
     request({
         uri: process.env.FEED_URL + '.json'
     }, function(err, response, body) {
@@ -59,6 +60,7 @@ function poll() {
                 }
 
                 if (ts > startup) {
+                    latest = ts;
                     twit.updateStatus(line.substring(0, 140), callback);
                 } else {
                     callback();
@@ -70,6 +72,7 @@ function poll() {
                     delay++;
                     console.log(err);
                 } else {
+                    startup = latest;
                     delay = process.env.DELAY || 5;
                 }
 
