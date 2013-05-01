@@ -8,9 +8,10 @@ var async = require('async'),
     _s = require('underscore.string'),
     feedUrl,
     moment = require('moment'),
-    startup = Date.now() - 5138929,
+    startup = Date.now(),
     twitter = require('ntwitter'),
-    twit;
+    twit,
+    delay;
 
 twit = twitter({
     consumer_key: process.env.CONSUMER_KEY,
@@ -34,7 +35,9 @@ function poll() {
     }, function(err, response, body) {
         var $,
             entries;
-        if (!err) {
+        if (err) {
+            callback(err);
+        } else {
             entries = JSON.parse(body);
             async.each(entries, function(entry, callback) {
                 var incoming = !!entry.incoming_message_id,
@@ -55,19 +58,23 @@ function poll() {
                     line = url + ' [' + status + '] ' + user + ' about ' + title;
                 }
 
-                console.log(ts + ' ' + (startup - ts));
                 if (ts > startup) {
                     twit.updateStatus(line.substring(0, 140), callback);
                 } else {
                     callback();
                 }
             }, function(err) {
+                delay = delay || process.env.DELAY || 5;
+
                 if (err) {
+                    delay++;
                     console.log(err);
                 } else {
-                    console.log('polling again in five ...');
-                    setTimeout(poll, (process.env.DELAY || 5) * 60 * 1000);
+                    delay = process.env.DELAY || 5;
                 }
+
+                console.log('polling again in ' + delay + ' minutes ...');
+                setTimeout(poll, delay * 60 * 1000);
             });
         }
     });
