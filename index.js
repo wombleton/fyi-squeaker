@@ -58,7 +58,6 @@ function poll() {
                 console.log(ts + ' ' + (startup - ts));
                 if (ts > startup) {
                     twit.updateStatus(line.substring(0, 140), callback);
-                    console.log('WOOT');
                 } else {
                     callback();
                 }
@@ -67,7 +66,7 @@ function poll() {
                     console.log(err);
                 } else {
                     console.log('polling again in five ...');
-                    setTimeout(poll, process.env.DELAY || 5 * 60 * 1000);
+                    setTimeout(poll, (process.env.DELAY || 5) * 60 * 1000);
                 }
             });
         }
