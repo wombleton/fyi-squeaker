@@ -74,4 +74,6 @@ function poll() {
     });
 }
 
-poll();
+if (process.env.FEED_URL) {
+    poll();
+}
