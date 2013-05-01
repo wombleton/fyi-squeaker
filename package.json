@@ -1,0 +1,32 @@
+{
+  "name": "fyi-squeaker",
+  "version": "0.0.1",
+  "description": "Polls an Alaveteli instance and tweets status changes.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/wombleton/fyi-squeaker.git"
+  },
+  "keywords": [
+    "alaveteli",
+    "foi",
+    "twitter"
+  ],
+  "author": "Rowan Crawford",
+  "license": "BSD",
+  "readmeFilename": "README.md",
+  "gitHead": "33aa64a7a9dd16e9721ed4716a3ed2db341e5bb6",
+  "dependencies": {
+    "properties": "~0.3.3",
+    "underscore": "~1.4.4",
+    "cheerio": "~0.11.0",
+    "request": "~2.21.0",
+    "moment": "~2.0.0",
+    "underscore.string": "~2.3.1",
+    "ntwitter": "~0.5.0",
+    "async": "~0.2.7"
+  }
+}
