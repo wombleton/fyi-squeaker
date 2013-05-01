@@ -31,13 +31,15 @@ feedUrl = url.parse(process.env.FEED_URL);
 
 function poll() {
     var latest = startup;
+
     request({
         uri: process.env.FEED_URL + '.json'
     }, function(err, response, body) {
         var $,
             entries;
+
         if (err) {
-            callback(err);
+            delay++;
         } else {
             entries = JSON.parse(body);
             async.each(entries, function(entry, callback) {
