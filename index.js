@@ -39,7 +39,8 @@ function poll() {
             entries;
 
         if (err) {
-            setTimeout(poll, delay++ * 60 * 1000);
+            console.log('polling again in ' + delay++ + ' minutes for events after ' + startup + ' ...');
+            setTimeout(poll, delay * 60 * 1000);
         } else {
             entries = JSON.parse(body);
             async.each(entries, function(entry, callback) {
