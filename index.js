@@ -37,6 +37,7 @@ function poll() {
     }, function(err, response, body) {
         var $,
             entries;
+        delay = delay || process.env.DELAY || 5;
 
         if (err) {
             console.log('polling again in ' + delay++ + ' minutes for events after ' + startup + ' ...');
@@ -69,8 +70,6 @@ function poll() {
                     callback();
                 }
             }, function(err) {
-                delay = delay || process.env.DELAY || 5;
-
                 if (err) {
                     delay++;
                     console.log(err);
