@@ -65,7 +65,12 @@ function poll() {
 
                 if (ts > startup) {
                     latest = ts;
-                    twit.updateStatus(line.substring(0, 140), callback);
+                    twit.updateStatus(line.substring(0, 140), function(err) {
+                        if (err) {
+                            startup = latest;
+                        }
+                        callback(err);
+                    });
                 } else {
                     callback();
                 }
