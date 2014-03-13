@@ -33,6 +33,7 @@ function poll() {
     var latest = startup;
 
     request({
+        json: true,
         uri: process.env.FEED_URL + '.json'
     }, function(err, response, body) {
         var $,
