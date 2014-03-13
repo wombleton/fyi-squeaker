@@ -35,14 +35,12 @@ function poll() {
     request({
         json: true,
         uri: process.env.FEED_URL + '.json'
-    }, function(err, response, body) {
-        var $,
-            entries;
+    }, function(err, response, entries) {
+        var $;
+
         delay = delay || process.env.DELAY || 5;
 
-        try {
-            entries = JSON.parse(body);
-        } catch (e) {
+        if (!_.isArray(entries)) {
             err = "JSON parse error.";
         }
 
