@@ -40,11 +40,16 @@ function poll() {
             entries;
         delay = delay || process.env.DELAY || 5;
 
+        try {
+            entries = JSON.parse(body);
+        } catch (e) {
+            err = "JSON parse error.";
+        }
+
         if (err) {
-            console.log('polling again in ' + delay++ + ' minutes for events after ' + startup + ' ...');
+            console.log('ERROR: %s Polling again in %s minutes for events after %s ...', err, delay++, startup);
             setTimeout(poll, delay * 60 * 1000);
         } else {
-            entries = JSON.parse(body);
             async.each(entries, function(entry, callback) {
                 var incoming = !!entry.incoming_message_id,
                     ts = moment(entry.created_at).valueOf(),
