@@ -51,12 +51,12 @@ function poll() {
       async.each(entries, function(entry, callback) {
         var incoming = !!entry.incoming_message_id,
             ts = moment(entry.created_at).valueOf(),
-        url = feedUrl.protocol + '//' + feedUrl.host + '/request_event/' + entry.id,
-        body = _s.prune(entry.public_body.short_name || entry.public_body.name, 30, ''),
-        title = _s.prune(entry.info_request.title, 60, ''),
-        user = _s.prune(entry.user.name, 30, ''),
-        status = (entry.display_status || '').replace(/\.$/, ''),
-        line;
+            url = feedUrl.protocol + '//' + feedUrl.host + '/request_event/' + entry.id,
+            body = _s.prune(entry.public_body.short_name || entry.public_body.name, 30, ''),
+            title = _s.prune(entry.info_request.title, 60, ''),
+            user = _s.prune(entry.user.name, 30, ''),
+            status = (entry.display_status || '').replace(/\.$/, ''),
+            line;
 
         if (entry.event_type === 'comment' || !status) {
           return callback();
