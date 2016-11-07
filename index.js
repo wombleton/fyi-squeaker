@@ -29,6 +29,14 @@ try {
   // do nothing. normal in production
 }
 
+console.log('CONSUMER_KEY: '+process.env.CONSUMER_KEY);
+console.log('CONSUMER_SECRET: '+(process.env.CONSUMER_SECRET != null));
+console.log('ACCESS_TOKEN: '+process.env.ACCESS_TOKEN);
+console.log('ACCESS_SECRET: '+(process.env.ACCESS_SECRET != null));
+console.log('FEED_URL: '+process.env.FEED_URL);
+console.log('DELAY: '+process.env.DELAY);
+console.log('NODE_ENV: '+process.env.NODE_ENV);
+
 feedUrl = url.parse(process.env.FEED_URL);
 
 queue = async.queue(processEntry);
