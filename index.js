@@ -10,17 +10,10 @@ var async = require('async'),
     moment = require('moment'),
     startup = Date.now(),
     latest = 0,
-    twitter = require('ntwitter'),
+    twitter = require('twit'),
     twit,
     delay,
     queue;
-
-twit = twitter({
-  consumer_key: process.env.CONSUMER_KEY,
-  consumer_secret: process.env.CONSUMER_SECRET,
-  access_token_key: process.env.ACCESS_TOKEN,
-  access_token_secret: process.env.ACCESS_SECRET
-});
 
 try {
   env = fs.readFileSync('.env', 'utf8');
@@ -28,6 +21,13 @@ try {
 } catch(e) {
   // do nothing. normal in production
 }
+
+twit = twitter({
+  consumer_key: process.env.CONSUMER_KEY,
+  consumer_secret: process.env.CONSUMER_SECRET,
+  access_token: process.env.ACCESS_TOKEN,
+  access_token_secret: process.env.ACCESS_SECRET
+});
 
 console.log('CONSUMER_KEY: '+process.env.CONSUMER_KEY);
 console.log('CONSUMER_SECRET: '+(process.env.CONSUMER_SECRET != null));
@@ -97,7 +97,14 @@ function processEntry(entry, callback) {
       latest = ts;
     }
     if (process.env.NODE_ENV === 'production') {
-      twit.updateStatus(_s.prune(line, 140), callback);
+
+      twit.post('statuses/update', { status: _s.prune(line, 140) },
+        function(err, data, response) {
+          if(err) { console.error(err) };
+
+          callback();
+        });
+
     } else {
       console.log(_s.prune(line, 140));
       callback();
