@@ -29,12 +29,19 @@ twit = twitter({
   access_token_secret: process.env.ACCESS_SECRET
 });
 
+process.env.TWEET_LENGTH = process.env.TWEET_LENGTH || 140;
+process.env.BODY_NAME_LENGTH = process.env.BODY_NAME_LENGTH || 30;
+process.env.USER_NAME_LENGTH = process.env.USER_NAME_LENGTH || 30;
+
 console.log('CONSUMER_KEY: '+process.env.CONSUMER_KEY);
 console.log('CONSUMER_SECRET: '+(process.env.CONSUMER_SECRET != null));
 console.log('ACCESS_TOKEN: '+process.env.ACCESS_TOKEN);
 console.log('ACCESS_SECRET: '+(process.env.ACCESS_SECRET != null));
 console.log('FEED_URL: '+process.env.FEED_URL);
 console.log('DELAY: '+process.env.DELAY);
+console.log('TWEET_LENGTH: '+process.env.TWEET_LENGTH);
+console.log('BODY_NAME_LENGTH: '+process.env.BODY_NAME_LENGTH);
+console.log('USER_NAME_LENGTH: '+process.env.USER_NAME_LENGTH);
 console.log('NODE_ENV: '+process.env.NODE_ENV);
 
 feedUrl = url.parse(process.env.FEED_URL);
@@ -76,9 +83,9 @@ function processEntry(entry, callback) {
   var incoming = !!entry.incoming_message_id,
       ts = moment(entry.created_at).valueOf(),
       url = feedUrl.protocol + '//' + feedUrl.host + '/request_event/' + entry.id,
-      body = _s.prune(entry.public_body.short_name || entry.public_body.name, 30, ''),
+      body = _s.prune(entry.public_body.short_name || entry.public_body.name, process.env.BODY_NAME_LENGTH, ''),
       title = entry.info_request.title,
-      user = _s.prune(entry.user.name, 30, ''),
+      user = _s.prune(entry.user.name, process.env.USER_NAME_LENGTH, ''),
       status = (entry.display_status || '').replace(/\.$/, ''),
       line;
 
@@ -91,14 +98,15 @@ function processEntry(entry, callback) {
   } else {
     line = _s.sprintf('%s [%s] %s about %s', url, status, user, title);
   }
+  _s.prune(line, process.env.TWEET_LENGTH)
 
   if (ts > startup) {
     if (ts > latest) {
       latest = ts;
     }
-    if (process.env.NODE_ENV === 'production') {
 
-      twit.post('statuses/update', { status: _s.prune(line, 140) },
+    if (process.env.NODE_ENV === 'production') {
+      twit.post('statuses/update', { status: line },
         function(err, data, response) {
           if(err) { console.error(err) };
 
@@ -106,7 +114,7 @@ function processEntry(entry, callback) {
         });
 
     } else {
-      console.log(_s.prune(line, 140));
+      console.log(line);
       callback();
     }
   } else {
