@@ -45,6 +45,8 @@ console.log('USER_NAME_LENGTH: '+process.env.USER_NAME_LENGTH);
 console.log('NODE_ENV: '+process.env.NODE_ENV);
 
 feedUrl = url.parse(process.env.FEED_URL);
+// URL is t.co wrapped, short_url_length_https = 23, plus a space after the URL
+textLength = process.env.TWEET_LENGTH - 24;
 
 queue = async.queue(processEntry);
 queue.drain = function() {
@@ -83,9 +85,9 @@ function processEntry(entry, callback) {
   var incoming = !!entry.incoming_message_id,
       ts = moment(entry.created_at).valueOf(),
       url = feedUrl.protocol + '//' + feedUrl.host + '/request_event/' + entry.id,
-      body = _s.prune(entry.public_body.short_name || entry.public_body.name, process.env.BODY_NAME_LENGTH, ''),
+      body = _s.prune(entry.public_body.short_name || entry.public_body.name, process.env.BODY_NAME_LENGTH, '…'),
       title = entry.info_request.title,
-      user = _s.prune(entry.user.name, process.env.USER_NAME_LENGTH, ''),
+      user = _s.prune(entry.user.name, process.env.USER_NAME_LENGTH, '…'),
       status = (entry.display_status || '').replace(/\.$/, ''),
       line;
 
@@ -94,11 +96,12 @@ function processEntry(entry, callback) {
   }
 
   if (incoming) {
-    line = _s.sprintf('%s [%s] %s replied about %s', url, status, body, title);
+    line = _s.sprintf('[%s] %s replied about %s', status, body, title);
   } else {
-    line = _s.sprintf('%s [%s] %s about %s', url, status, user, title);
+    line = _s.sprintf('[%s] %s about %s', status, user, title);
   }
-  _s.prune(line, process.env.TWEET_LENGTH)
+  line = _s.prune(line, textLength-1, '…'); // -1 for the ellipsis
+  line = _s.sprintf('%s %s', url, line);
 
   if (ts > startup) {
     if (ts > latest) {
