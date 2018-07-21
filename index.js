@@ -102,7 +102,7 @@ function processEntry(entry, callback) {
     line = sprintf('[%s] %s about %s', status, user, title);
   }
   line = _s.prune(line, textLength-1, '…'); // -1 for the ellipsis
-  line = sprintf('%s %s', url, line);
+  line = sprintf('%s %s', line, url);
 
   if (ts > startup) {
     if (ts > latest) {
