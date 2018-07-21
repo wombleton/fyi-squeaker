@@ -6,6 +6,7 @@ var async = require('async'),
     request = require('request'),
     url = require('url'),
     _s = require('underscore.string'),
+    sprintf = require("sprintf-js").sprintf,
     feedUrl,
     moment = require('moment'),
     startup = Date.now(),
@@ -96,12 +97,12 @@ function processEntry(entry, callback) {
   }
 
   if (incoming) {
-    line = _s.sprintf('[%s] %s replied about %s', status, body, title);
+    line = sprintf('[%s] %s replied about %s', status, body, title);
   } else {
-    line = _s.sprintf('[%s] %s about %s', status, user, title);
+    line = sprintf('[%s] %s about %s', status, user, title);
   }
   line = _s.prune(line, textLength-1, '…'); // -1 for the ellipsis
-  line = _s.sprintf('%s %s', url, line);
+  line = sprintf('%s %s', url, line);
 
   if (ts > startup) {
     if (ts > latest) {
