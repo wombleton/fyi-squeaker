@@ -102,6 +102,7 @@ const workQueue = queue(async (entry, callback) => {
       callback();
     }
   } else {
+    console.log(`entry from before timestamp we're considering, discarding`);
     callback();
   }
 }, 1);
@@ -127,8 +128,7 @@ async function poll() {
       console.log(
         `Adding ${entries.length} feed items to the queue to be considered.`
       );
-      const [entry] = entries;
-      workQueue.unshift([entry]);
+      workQueue.unshift(entries);
     } else {
       throw new Error("Did not get an array of entries");
     }
