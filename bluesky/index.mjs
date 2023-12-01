@@ -125,10 +125,12 @@ async function poll() {
     const entries = await response.json();
 
     if (Array.isArray(entries)) {
-      console.log(
-        `Adding ${entries.length} feed items to the queue to be considered.`
-      );
-      workQueue.unshift(entries);
+      const workItems = entries.filter((entry) => {
+        const createdAt = moment(entry.created_at).valueOf();
+        return createdAt > considerPostsAfter;
+      });
+      console.log(`Adding ${workItems.length} items to work queue`);
+      workQueue.unshift(workItems);
     } else {
       throw new Error("Did not get an array of entries");
     }
