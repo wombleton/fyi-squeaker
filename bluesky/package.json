@@ -1,0 +1,23 @@
+{
+  "name": "fyi-squeaker/bluesky",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rowan Crawford",
+  "license": "ISC",
+  "dependencies": {
+    "@atproto/api": "^0.6.23",
+    "async": "^3.2.5",
+    "dotenv": "^16.3.1",
+    "moment": "^2.29.4",
+    "node-fetch": "^3.3.2",
+    "properties": "^1.2.1",
+    "request": "^2.88.2",
+    "sprintf-js": "^1.1.3",
+    "underscore.string": "^3.3.6"
+  }
+}
