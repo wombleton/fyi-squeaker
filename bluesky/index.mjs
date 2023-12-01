@@ -93,6 +93,7 @@ const workQueue = queue(async (entry, callback) => {
       };
       try {
         await agent.post(postRecord);
+        console.log(`Posted about entry #${entry.id} successfully`);
       } catch (err) {
         console.log(err);
         callback();
