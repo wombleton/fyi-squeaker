@@ -19,5 +19,8 @@
     "request": "^2.88.2",
     "sprintf-js": "^1.1.3",
     "underscore.string": "^3.3.6"
+  },
+  "devDependencies": {
+    "has-flag": "^5.0.1"
   }
 }
